@@ -1,0 +1,26 @@
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+  roles:
+    - { 
+        role: rvm_io.rvm1-ruby, 
+        tags: ruby, 
+        sudo: True, 
+        rvm1_rubies: 'ruby-2.1.5', 
+        rvm1_default_ruby_version: 'ruby-2.1.5',
+        rvm1_install_path: '/home/{{ ansible_ssh_user }}/.rvm',
+        rvm1_install_flags: '--auto-dotfiles --user-install',
+        rvm1_user: 'vagrant'
+      }
+    - {
+        role: ANXS.postgresql,
+        sudo: True
+      }
+    - { role: pablocrivella.heroku-toolbelt }
+
+  tasks:
+    - name: PG dependencies
+      apt: name=libpq-dev
+
+    
